@@ -500,7 +500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   gravity: -9.18
-  jumpPower: 3
+  jumpPower: 5
 --- !u!54 &1838724318
 Rigidbody:
   m_ObjectHideFlags: 0
