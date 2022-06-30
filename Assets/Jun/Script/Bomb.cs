@@ -1,14 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
+    public State state;
+    public enum State
+    {
+        Throw,
+        Explosion
+    }
+
     Transform target;
     public float firingAngle = 45.0f;
     public float gravity = 9.8f;
 
-    public Transform bomb;
+    float currentTime;
+    public float explosionTime = 2f;
+
+    public GameObject vfx_Explosion;
+
     private Transform myTransform;
 
 
@@ -22,24 +34,34 @@ public class Bomb : MonoBehaviour
     {
         StartCoroutine(IThrowAction());
         target = GameObject.Find("Player").transform;
+
+        state = State.Throw;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(state == State.Explosion)
+        {
+            UpdateExplosion();
+        }
+    }
 
+    private void UpdateExplosion()
+    {
+        //여기해야함
     }
 
     IEnumerator IThrowAction()
     {
         //살짝 시간을 준뒤
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
 
-        // 특정 위치로 폭탄을 던진다 필요하면 Vector3을 이용해 offset 을 준다.
-        bomb.position = myTransform.position + new Vector3(0, 0.0f, 0);
+        //// 특정 위치로 폭탄을 던진다 필요하면 Vector3을 이용해 offset 을 준다.
+        //transform.position = myTransform.position + new Vector3(0, 0.0f, 0);
 
         //타겟과 거리를 계산한다.
-        float targetDistance = Vector3.Distance(bomb.position, target.position);
+        float targetDistance = Vector3.Distance(transform.position, target.position);
 
         //특정 앵글로 특정위치에 던지는 속도를 계산한다.
         float bombVelocity = targetDistance / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
@@ -52,18 +74,22 @@ public class Bomb : MonoBehaviour
         float flightDuration = targetDistance / Vx;
 
         //타겟 위치로 폭탄방향을 조정한다.
-        bomb.rotation = Quaternion.LookRotation(target.position - bomb.position);
+        transform.rotation = Quaternion.LookRotation(target.position - transform.position);
 
         float elapseTime = 0;
 
+        float time = Time.deltaTime * 3;
+
         while(elapseTime < flightDuration)
         {
-            bomb.Translate(0, (Vy - (gravity * elapseTime)) * Time.deltaTime, Vx * Time.deltaTime);
+            transform.Translate(0, (Vy - (gravity * elapseTime)) * time, Vx * time);
 
-            elapseTime += Time.deltaTime;
+            elapseTime += time;
 
             yield return null;
         }
 
+        state = State.Explosion;
     }
+
 }

@@ -59,7 +59,6 @@ public class Enemy_Minion_Move : MonoBehaviour
     float moveDistance = 100f;
     private void UpdateLD()
     {
-        Debug.Log("Long");
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance < moveDistance)
         {
@@ -72,7 +71,6 @@ public class Enemy_Minion_Move : MonoBehaviour
     private void UpdateMove()
     {
 
-        Debug.Log("Move");
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
 
@@ -89,7 +87,6 @@ public class Enemy_Minion_Move : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, target.transform.position);
 
-        Debug.Log("short");
 
         if (distance > shortDistance)
         {
