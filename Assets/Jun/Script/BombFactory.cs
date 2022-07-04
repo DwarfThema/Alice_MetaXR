@@ -28,8 +28,8 @@ public class BombFactory : MonoBehaviour
 
         if (throwTime > 5)
         {
-            Instantiate(bomb);
-            bomb.transform.position = transform.position;
+            GameObject bombIns = Instantiate(bomb);
+            bombIns.transform.position = transform.position;
             throwTime = 0;
         }
 

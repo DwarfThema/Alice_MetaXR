@@ -24,14 +24,22 @@ public class Enemy_Minion_Move : MonoBehaviour
 
     NavMeshAgent agent;
 
+    BombFactory factory;
+
+    Enemy_Minion_Tall_ShortAttack shortAttack;
+
     // Start is called before the first frame update
     void Start()
     {
         target = GameObject.Find("Player");
 
         agent = GetComponent<NavMeshAgent>();
+        factory = GetComponent<BombFactory>();
+        shortAttack = GetComponent<Enemy_Minion_Tall_ShortAttack>();
 
         state = State.LongAttack;
+
+        
 
     }
 
@@ -43,14 +51,20 @@ public class Enemy_Minion_Move : MonoBehaviour
 
         if (state == State.ShortAttack)
         {
+            factory.enabled = false;
+            shortAttack.enabled = true;
             UpdateSD();
         }
         else if(state == State.Move)
         {
+            factory.enabled = true;
+            shortAttack.enabled = false;
             UpdateMove();
         }
         else
         {
+            factory.enabled = true;
+            shortAttack.enabled = false;
             UpdateLD();
         }
     }

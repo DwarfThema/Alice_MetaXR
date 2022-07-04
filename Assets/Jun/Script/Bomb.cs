@@ -43,13 +43,19 @@ public class Bomb : MonoBehaviour
     {
         if(state == State.Explosion)
         {
-            UpdateExplosion();
+            currentTime += Time.deltaTime;
+            if(currentTime > explosionTime)
+            {
+                UpdateExplosion();
+            }
         }
     }
 
     private void UpdateExplosion()
     {
-        //여기해야함
+        GameObject bombVFX = Instantiate(vfx_Explosion);
+        bombVFX.transform.position = transform.position;
+        Destroy(gameObject);
     }
 
     IEnumerator IThrowAction()
@@ -58,10 +64,10 @@ public class Bomb : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         //// 특정 위치로 폭탄을 던진다 필요하면 Vector3을 이용해 offset 을 준다.
-        //transform.position = myTransform.position + new Vector3(0, 0.0f, 0);
+        transform.position = myTransform.position + new Vector3(10, 0.0f, 10);
 
-        //타겟과 거리를 계산한다.
-        float targetDistance = Vector3.Distance(transform.position, target.position);
+        //타겟과 거리를 계산한다. (이때 벡터3으로 랜덤값을준다)
+        float targetDistance = Vector3.Distance(transform.position, target.position + new Vector3(UnityEngine.Random.value * 20,0, UnityEngine.Random.value * 20) );
 
         //특정 앵글로 특정위치에 던지는 속도를 계산한다.
         float bombVelocity = targetDistance / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
@@ -74,7 +80,7 @@ public class Bomb : MonoBehaviour
         float flightDuration = targetDistance / Vx;
 
         //타겟 위치로 폭탄방향을 조정한다.
-        transform.rotation = Quaternion.LookRotation(target.position - transform.position);
+        transform.rotation = Quaternion.LookRotation(target.position + new Vector3(UnityEngine.Random.value * 20, 0, UnityEngine.Random.value * 20) - transform.position);
 
         float elapseTime = 0;
 

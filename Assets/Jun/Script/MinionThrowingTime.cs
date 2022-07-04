@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class MinionThrowingTime : MonoBehaviour
 {
-    public Transform target;
+    Transform target;
     public float firingAngle = 45.0f;
     public float gravity = 9.8f;
 
@@ -13,6 +13,7 @@ public class MinionThrowingTime : MonoBehaviour
 
     public Enemy_Minion_Move em_S;
     public MinionThrowingTime mtt_S;
+
 
     private void Awake()
     {
@@ -26,8 +27,13 @@ public class MinionThrowingTime : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().useGravity = false;
         em_S.enabled = false;
 
+        string[] tragetArray = new string[5]
+        {
+            "ThrowingTarget (1)", "ThrowingTarget (2)","ThrowingTarget (3)","ThrowingTarget (4)","ThrowingTarget (5)",
+        };
+
         StartCoroutine(IThrowAction());
-        target = GameObject.Find("ThrowingTarget").transform;
+        target = GameObject.Find(tragetArray[Random.Range(0,4)]).transform;
     }
 
     // Update is called once per frame
@@ -39,10 +45,13 @@ public class MinionThrowingTime : MonoBehaviour
     IEnumerator IThrowAction()
     {
         //살짝 시간을 준뒤
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0f);
 
         //// 특정 위치로 폭탄을 던진다 필요하면 Vector3을 이용해 offset 을 준다.
         //transform.position = myTransform.position + new Vector3(0, 0.0f, 0);
+
+        GameObject traget = GameObject.Find("Boss_EnemyFactory");
+        transform.position = traget.transform.position;
 
         //타겟과 거리를 계산한다.
         float targetDistance = Vector3.Distance(transform.position, target.position);
